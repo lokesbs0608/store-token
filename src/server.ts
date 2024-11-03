@@ -6,6 +6,7 @@ import cors from 'cors';  // Import cors
 import connectDB from './config/db';
 import userRoutes from './routes/user';
 import categoryRoutes from './routes/category';
+import productsRoutes from './routes/category';
 
 
 const app = express();
@@ -27,7 +28,8 @@ connectDB();
 
 
 app.use('/api/users', userRoutes);  // Use '/api/users' for user routes
-app.use('/api/category', categoryRoutes);  // Use '/api/users' for user routes
+app.use('/api/category', categoryRoutes);  // Use '/api/category' for category routes
+app.use('/api/product', productsRoutes);  // Use '/api/product' for product routes
 
 
 const PORT = process.env.PORT || 8877;

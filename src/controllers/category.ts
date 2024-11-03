@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Category from '../models/category'; // Assuming category model is in models folder
+import Category from '../models/category'; 
 
 // Create a new category
 export const createCategory = async (req: Request, res: Response): Promise<Response> => {
