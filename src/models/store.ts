@@ -1,46 +1,38 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-// Define the interface for account details
-interface AccountDetails {
-    bankName: string;
-    ifsc: string;
-    accountNumber: string;
-    upiId: string;
-    gstNumber: string;
-}
-
-// Define the interface for the Store model
-interface Store extends Document {
-    userId: mongoose.Types.ObjectId; // Reference to the User model
+interface IStore extends Document {
+    user_id: mongoose.Schema.Types.ObjectId;
     storeName: string;
     address: string;
     storeFrontImage: string;
     storeLogo: string;
     storeBannerImages: string[];
-    accountDetails: AccountDetails; // Embedded AccountDetails schema
+    accountDetails: {
+        bankName: string;
+        ifsc: string;
+        accountNumber: string;
+        upiId: string;
+        gstNumber: string;
+    };
+    qrCode?: string; // Field to store QR code
 }
 
-// Schema for account details
-const accountDetailsSchema = new Schema<AccountDetails>({
-    bankName: { type: String, required: true },
-    ifsc: { type: String, required: true },
-    accountNumber: { type: String, required: true },
-    upiId: { type: String, required: true },
-    gstNumber: { type: String, required: true },
-});
-
-// Main store schema
-const storeSchema = new Schema<Store>({
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+const StoreSchema: Schema<IStore> = new Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     storeName: { type: String, required: true },
     address: { type: String, required: true },
     storeFrontImage: { type: String, required: false },
     storeLogo: { type: String, required: false },
-    storeBannerImages: { type: [String], required: false },
-    accountDetails: { type: accountDetailsSchema, required: false },
-}, { timestamps: true }); // Automatically add createdAt and updatedAt fields
+    storeBannerImages: [{ type: String }],
+    accountDetails: {
+        bankName: { type: String, required: false },
+        ifsc: { type: String, required: false },
+        accountNumber: { type: String, required: false },
+        upiId: { type: String, required: false },
+        gstNumber: { type: String, required: false },
+    },
+    qrCode: { type: String },
+});
 
-// Create the Store model
-const StoreModel = mongoose.model<Store>('Store', storeSchema);
-
+const StoreModel = mongoose.model<IStore>('Store', StoreSchema);
 export default StoreModel;

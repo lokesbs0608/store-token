@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import StoreModel from '../models/store';
+import QRCode from 'qrcode';
 
 // Create a new store
 export const createStore = async (req: Request, res: Response): Promise<void> => {
@@ -80,6 +81,49 @@ export const deleteStore = async (req: Request, res: Response): Promise<void> =>
             res.status(400).json({ error: 'Invalid store ID' });
         } else {
             res.status(500).json({ error: 'Failed to delete store' });
+        }
+    }
+};
+
+
+
+// Define a type for required fields
+type RequiredStoreFields = 'user_id' | 'storeName' | 'address' | 'storeFrontImage' | 'storeLogo' | 'accountDetails';
+
+// Verify store details and generate QR code
+export const verifyAndGenerateQRCode = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { storeId } = req.params; // Assuming the store ID is passed in the URL
+        const store = await StoreModel.findById(storeId);
+        
+        if (!store) {
+            res.status(404).json({ error: 'Store not found' });
+            return;
+        }
+
+        // Check if all required fields are filled
+        const requiredFields: RequiredStoreFields[] = ['user_id', 'storeName', 'address', 'storeFrontImage', 'storeLogo', 'accountDetails'];
+        for (const field of requiredFields) {
+            if (!store[field]) {  // Now TypeScript knows 'field' is a key of 'store'
+                res.status(400).json({ error: `Field ${field} is required` });
+                return;
+            }
+        }
+
+        // Generate QR code
+        const qrCodeData = `Store Name: ${store.storeName}, Store ID: ${storeId}`;
+        const qrCodeImage = await QRCode.toDataURL(qrCodeData);
+
+        // Update store with QR code
+        store.qrCode = qrCodeImage;
+        await store.save();
+
+        res.status(200).json({ message: 'QR code generated successfully', qrCode: qrCodeImage });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Failed to generate QR code' });
         }
     }
 };
