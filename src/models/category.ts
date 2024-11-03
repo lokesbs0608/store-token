@@ -6,6 +6,7 @@ interface ICategory extends Document {
     parentCategory?: mongoose.Types.ObjectId;
     created_at: Date;
     updated_at: Date;
+    store_id:mongoose.Types.ObjectId
 }
 
 const categorySchema: Schema<ICategory> = new Schema({
@@ -33,6 +34,11 @@ const categorySchema: Schema<ICategory> = new Schema({
         type: Date,
         default: Date.now,
     },
+    store_id:{
+        type:Schema.Types.ObjectId,
+        ref: 'Category',  // Reference to Category model
+        required:true,
+    }
 });
 
 categorySchema.pre<ICategory>('save', function (next) {

@@ -5,10 +5,12 @@ import {
     getProductById,
     updateProduct,
     deleteProduct,
+    getAllStoreProducts,
 } from "../controllers/products";
 import { authorizeStoreOrSuperAdmin } from "../middlewares/auth";
 
 const router = Router();
+
 
 // Route to create a new product
 router.post("/", createProduct);
@@ -24,5 +26,8 @@ router.put("/:id", authorizeStoreOrSuperAdmin, updateProduct);
 
 // Route to delete a product by ID
 router.delete("/:id", authorizeStoreOrSuperAdmin, deleteProduct);
+
+router.get('/storeId/:id', getAllStoreProducts)
+
 
 export default router;

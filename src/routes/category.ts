@@ -4,14 +4,15 @@ import {
     getAllCategories,
     getCategoryById,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoryByStoreId
 } from '../controllers/category';
 import { authorizeStoreOrSuperAdmin } from '../middlewares/auth';
 
 const router = Router();
 
 // Route for creating a new category
-router.post('/', authorizeStoreOrSuperAdmin, createCategory);
+router.post('/', createCategory);
 
 // Route for fetching all categories
 router.get('/', getAllCategories);
@@ -24,5 +25,8 @@ router.put('/:id', authorizeStoreOrSuperAdmin, updateCategory);
 
 // Route for deleting a category by ID
 router.delete('/:id', authorizeStoreOrSuperAdmin, deleteCategory);
+
+// Route for fetching a single category by ID
+router.get('/storeId/:id', getCategoryByStoreId);
 
 export default router;

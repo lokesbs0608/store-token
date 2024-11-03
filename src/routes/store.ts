@@ -15,7 +15,7 @@ import {
 const router = Router();
 
 // Routes for store CRUD operations
-router.post("/", StoreAuthMiddleware, createStore);
+router.post("/", createStore);
 router.get("/", getAllStores);
 router.get("/:id", getStoreById);
 router.put("/:id", StoreAuthMiddleware, updateStore);

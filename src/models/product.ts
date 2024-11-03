@@ -52,7 +52,6 @@ const productSchema: Schema<IProduct> = new Schema({
     },
     description: {
         type: String,
-        required: false,
         max_length: 2000,
     },
     category: {
@@ -67,7 +66,6 @@ const productSchema: Schema<IProduct> = new Schema({
     sku: {
         type: String,
         unique: true,
-        required: false,
     },
     price: {
         type: Number,
@@ -140,7 +138,7 @@ const productSchema: Schema<IProduct> = new Schema({
         type: Number,
         min: 1,
         max: 5,
-        default: 0,
+        default: 1,
     },
     tags: [
         {
