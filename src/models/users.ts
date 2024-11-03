@@ -1,13 +1,12 @@
 import mongoose, { Document, Schema, model } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 
 // Interface representing a user document
 interface IUser extends Document {
     name: string;
     email: string;
     password: string;
-    role: 'user' | 'admin';
+    role: 'user' | 'admin' | 'store_admin';
     otp?: string;
     otpExpires?: Date;
     passwordResetToken?: string;
@@ -40,7 +39,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
         role: {
             type: String,
             enum: ['user', 'admin', 'store_admin'],
-            default: 'user',
+            default: 'store_admin',
         },
         otp: String,
         otpExpires: Date,
